@@ -11,7 +11,7 @@ from tensorflow.keras.layers import  LSTM, Bidirectional
 from tensorflow.keras.layers import Activation
 from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.callbacks import ModelCheckpoint, History
-
+import os
 
 
 def create_network2(network_input, n_vocab):
@@ -92,6 +92,7 @@ def sample_with_temperature(probabilities, temperature):
 
     return index
 
+
 def generate_notes(model, network_input, pitchnames, n_vocab, n_steps, temperature):
     """ Generate notes from the neural network based on a sequence of notes """
     # pick a random sequence from the input as a starting point for the prediction
@@ -136,10 +137,22 @@ def generate_notes(model, network_input, pitchnames, n_vocab, n_steps, temperatu
 
     return prediction_output
 
+def remove_generated_midis():
+    exclude = set(['env'])
+    for root, dirs, files in os.walk(os.getcwd()):
+        dirs[:] = [d for d in dirs if d not in exclude]
+        for file in files:
+            if file[-4:] == '.mid':
+                # print(os.path.join(root, file))
+                os.remove(os.path.join(root, file))
+
+
 def create_midi(prediction_output, name):
     
     """ convert the output from the prediction to notes and create a midi file
         from the notes """
+        
+    remove_generated_midis()
     offset = 0
     output_notes = []
 
@@ -193,6 +206,6 @@ def generate_beethoven(n_steps, temperature, file_name='untitled'):
   
   
 if __name__ == "__main__":
-  generate_beethoven(100, 1.0)
+  generate_beethoven(100, 1.0,'testttt')
 
   
