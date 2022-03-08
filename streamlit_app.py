@@ -40,8 +40,7 @@ db = firebase.database()
 storage = firebase.storage()
 
 
-st.sidebar.title("Our community app")
-
+st.sidebar.title("Neural Composer")
 
 
 #Authentication 
@@ -73,22 +72,12 @@ if choice == 'Sign up':
                     st.title(f'Welcome {handle}')
                     st.info('Login via login drop down select menu ')
                 else:
-                    st.error('Invalid Email')
+                    st.warning('Invalid Email')
             else:
                 st.error('Please fill email and password fields')
     
     except requests.HTTPError as f:
         st.error('Error! Email is already registered or Password is too weak')
-
-      
-        
-            
-
-
-    
-
-      
-        
         
         
 if choice == 'Login':
@@ -131,8 +120,8 @@ if choice == 'Login':
                     
                     if st.button('download'):
                         webbrowser.open_new_tab(file_to_be_downloaded)
-                        
-                               
+                
+                
                 elif pages == 'Neural Generator':
                     
                     st.title('Neural Generator')
@@ -145,12 +134,12 @@ if choice == 'Login':
                     form = st.form(key='submit-form')
                     genre = form.selectbox('genre', options=['Classic', 'Gaming'])
                     file_name = form.text_input('What would you like your file to be named?', placeholder='Name')
-                    num_steps = form.number_input('number of steps in 16th notes (Song length)',min_value=1, value=200, step=10)
-                    predictability = form.number_input('predictibilty - the lower the number, the less preditable the generated output will be', min_value=0.1, max_value=1.0, step=0.1)
+                    num_steps = form.slider('number of steps in 16th notes (Song length)',min_value=1, value=200, step=10, max_value=400)
+                    predictability = form.number_input('predictibilty - the lower the number, the less preditable the generated output will be', min_value=0.1, max_value=1.0, step=0.1,value=0.8)
                     generate_button = form.form_submit_button('Generate')
+                    
 
 
-            
 
                     if generate_button:
                         if not file_name:
@@ -176,28 +165,3 @@ if choice == 'Login':
                 st.error('Invalid Email')
         else:
             st.error('Please fill email and password fields')                
-                            
-      
-
-                            
-
-             
-                        
-       
-                
-            
-
-            
-            
-                
-                
-            
-            
-            
-            
-            
-        
-                    
-        
-        
-        
