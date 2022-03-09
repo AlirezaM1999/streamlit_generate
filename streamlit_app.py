@@ -1,4 +1,5 @@
 from logging import exception
+from types import NoneType
 from urllib.error import HTTPError
 import requests
 import webbrowser
@@ -102,26 +103,34 @@ if choice == 'Login':
                     if upload:
                         
                         uid = user['localId']
-                        fireb_upload = storage.child(uid).put(uploaded_file, user['idToken'])
-                        stored_file = storage.child(uid).get_url(fireb_upload['downloadTokens'])
-                        db.child(uid) .child('Audio_Files').push(stored_file)
+                        # fireb_upload = storage.child(uid).put(uploaded_file, user['idToken'])
+                        # stored_file = storage.child(uid).get_url(fireb_upload['downloadTokens'])
+                        # db.child(uid).child('Audio_Files').push(stored_file)
+                        # st.success('File successfully uploaded')
+                        fireb_upload = storage.child(uploaded_file.name).put(uploaded_file, user['idToken'])
+                        stored_file = storage.child(uploaded_file.name).get_url(fireb_upload['downloadTokens'])
+                        db.child(uid).child('Audio_Files').push(stored_file)
                         st.success('File successfully uploaded')
                         
+                        
                     
-                elif pages == 'Generated MIDIs':   
+                elif pages == 'Generated MIDIs':
+
                     Audio  = db.child(user['localId']).child('Audio_Files').get()
                     file_choices = []
                     
-                    for i in Audio.each():
-                        i_choice = i.val()   
-                        st.write(i_choice)
-                        file_choices.append(i_choice)
-                        
-                    file_to_be_downloaded = st.radio('Select the file you would like to downlaod', file_choices)
-                    
-                    if st.button('download'):
-                        webbrowser.open_new_tab(file_to_be_downloaded)
-                
+                    try:
+                        for i in Audio.each():
+                            i_choice = i.val()   
+                            file_choices.append(i_choice)
+                            
+                        file_to_be_downloaded = st.radio('Select the file you would like to downlaod', file_choices)
+                        if st.button('download'):
+                            webbrowser.open_new_tab(file_to_be_downloaded)
+                            
+                    except TypeError:
+                        st.info('No Files')
+                            
                 
                 elif pages == 'Neural Generator':
                     
@@ -138,6 +147,7 @@ if choice == 'Login':
                     num_steps = form.slider('number of steps in 16th notes (Song length)',min_value=1, value=200, step=10, max_value=400)
                     predictability = form.number_input('predictibilty - the lower the number, the less preditable the generated output will be', min_value=0.1, max_value=1.0, step=0.1,value=0.8)
                     generate_button = form.form_submit_button('Generate')
+                
                     
 
 
