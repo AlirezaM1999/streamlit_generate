@@ -12,6 +12,7 @@ import streamlit as st
 from models.pokemon_model.pokemon_model import generate_pokemon
 from models.beethoven_model.beethoven_model import generate_beethoven
 from models.folk_model.folk_model import generate_folk
+from models.lofi_model.lofi_model import generate_lofi
 import os 
 import re
 
@@ -29,7 +30,6 @@ firebaseConfig = {
     "measurementId": "G-XG4RTFPMWS"
 
 }
-
 
 
 
@@ -101,21 +101,22 @@ if choice == 'Login':
                     
                     
                     if upload:
+                        try:
                         
-                        uid = user['localId']
-                        # fireb_upload = storage.child(uid).put(uploaded_file, user['idToken'])
-                        # stored_file = storage.child(uid).get_url(fireb_upload['downloadTokens'])
-                        # db.child(uid).child('Audio_Files').push(stored_file)
-                        # st.success('File successfully uploaded')
-                        fireb_upload = storage.child(uploaded_file.name).put(uploaded_file, user['idToken'])
-                        stored_file = storage.child(uploaded_file.name).get_url(fireb_upload['downloadTokens'])
-                        db.child(uid).child('Audio_Files').push(stored_file)
-                        st.success('File successfully uploaded')
+                            uid = user['localId']
+                            # fireb_upload = storage.child(uid).put(uploaded_file, user['idToken'])
+                            # stored_file = storage.child(uid).get_url(fireb_upload['downloadTokens'])
+                            # db.child(uid).child('Audio_Files').push(stored_file)
+                            # st.success('File successfully uploaded')
+                            fireb_upload = storage.child(uploaded_file.name).put(uploaded_file, user['idToken'])
+                            stored_file = storage.child(uploaded_file.name).get_url(fireb_upload['downloadTokens'])
+                            db.child(uid).child('Audio_Files').push(stored_file)
+                            st.success('File successfully uploaded')
                         
-                        
+                        except:
+                            st.error('Please select a file to upload!')
                     
                 elif pages == 'Generated MIDIs':
-
                     Audio  = db.child(user['localId']).child('Audio_Files').get()
                     file_choices = []
                     
@@ -124,9 +125,12 @@ if choice == 'Login':
                             i_choice = i.val()   
                             file_choices.append(i_choice)
                             
-                        file_to_be_downloaded = st.radio('Select the file you would like to downlaod', file_choices)
-                        if st.button('download'):
+                        file_to_be_downloaded = st.radio('Select the file you would like to download', file_choices)
+                        if st.button('Download'):
                             webbrowser.open_new_tab(file_to_be_downloaded)
+                        if st.button('Delete'):
+                            pass
+                            
                             
                     except TypeError:
                         st.info('No Files')
@@ -142,7 +146,7 @@ if choice == 'Login':
 
 
                     form = st.form(key='submit-form')
-                    genre = form.selectbox('genre', options=['Classic', 'Gaming', 'Folk'])
+                    genre = form.selectbox('genre', options=['Classic', 'Gaming', 'Folk', 'Lofi'])
                     file_name = form.text_input('What would you like your file to be named?', placeholder='Name')
                     num_steps = form.slider('number of steps in 16th notes (Song length)',min_value=1, value=200, step=10, max_value=400)
                     predictability = form.number_input('predictibilty - the lower the number, the less preditable the generated output will be', min_value=0.1, max_value=1.0, step=0.1,value=0.8)
@@ -165,6 +169,8 @@ if choice == 'Login':
                                         generate_pokemon(file_name=file_name,n_steps=num_steps, temperature=predictability)
                                     case "Folk":
                                         generate_folk(file_name=file_name,n_steps=num_steps, temperature=predictability)
+                                    case "Lofi":
+                                        generate_lofi(file_name=file_name,n_steps=num_steps, temperature=predictability)
                                         
                                         
                                 with open(file_name+'.mid', 'rb') as fp:
@@ -174,6 +180,7 @@ if choice == 'Login':
                                         file_name=f'{file_name}.mid'
                                         
                                     )
+
             else:
                 st.error('Invalid Email')
         else:
