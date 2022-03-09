@@ -10,6 +10,7 @@ from fileinput import filename
 import streamlit as st 
 from models.pokemon_model.pokemon_model import generate_pokemon
 from models.beethoven_model.beethoven_model import generate_beethoven
+from models.folk_model.folk_model import generate_folk
 import os 
 import re
 
@@ -132,7 +133,7 @@ if choice == 'Login':
 
 
                     form = st.form(key='submit-form')
-                    genre = form.selectbox('genre', options=['Classic', 'Gaming'])
+                    genre = form.selectbox('genre', options=['Classic', 'Gaming', 'Folk'])
                     file_name = form.text_input('What would you like your file to be named?', placeholder='Name')
                     num_steps = form.slider('number of steps in 16th notes (Song length)',min_value=1, value=200, step=10, max_value=400)
                     predictability = form.number_input('predictibilty - the lower the number, the less preditable the generated output will be', min_value=0.1, max_value=1.0, step=0.1,value=0.8)
@@ -152,6 +153,8 @@ if choice == 'Login':
                                         generate_beethoven(file_name=file_name,n_steps=num_steps, temperature=predictability)         
                                     case "Gaming":
                                         generate_pokemon(file_name=file_name,n_steps=num_steps, temperature=predictability)
+                                    case "Folk":
+                                        generate_folk(file_name=file_name,n_steps=num_steps, temperature=predictability)
                                         
                                         
                                 with open(file_name+'.mid', 'rb') as fp:
