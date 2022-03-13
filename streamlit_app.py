@@ -81,7 +81,7 @@ if choice == 'Sign up':
     except requests.HTTPError as f:
         st.error('Error! Email is already registered or Password is too weak')
         
-        
+      
 if choice == 'Login':
     login = st.sidebar.checkbox('Login/Logout')
     
@@ -112,6 +112,7 @@ if choice == 'Login':
                             stored_file = storage.child(uploaded_file.name).get_url(fireb_upload['downloadTokens'])
                             db.child(uid).child('Audio_Files').push(stored_file)
                             st.success('File successfully uploaded')
+                            
                         
                         except:
                             st.error('Please select a file to upload!')
@@ -122,14 +123,17 @@ if choice == 'Login':
                     
                     try:
                         for i in Audio.each():
-                            i_choice = i.val()   
+                            i_choice = i.val() 
                             file_choices.append(i_choice)
                             
                         file_to_be_downloaded = st.radio('Select the file you would like to download', file_choices)
                         if st.button('Download'):
                             webbrowser.open_new_tab(file_to_be_downloaded)
                         if st.button('Delete'):
-                            pass
+                            for i in Audio.each():
+                                if i.val() == file_to_be_downloaded:
+                                    db.child(user['localId']).child('Audio_Files').child(i.key()).remove()
+                                    st.experimental_rerun()
                             
                             
                     except TypeError:
