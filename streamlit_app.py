@@ -1,19 +1,19 @@
-from logging import exception
-from types import NoneType
-from urllib.error import HTTPError
+#from logging import exception
+# from types import NoneType
+# from urllib.error import HTTPError
 import requests
 import webbrowser
-from numpy import datetime64
+#from numpy import datetime64
 import pyrebase
 import streamlit as st
-from datetime import date, datetime
+# from datetime import date, datetime
 from fileinput import filename
 import streamlit as st 
 from models.pokemon_model.pokemon_model import generate_pokemon
 from models.beethoven_model.beethoven_model import generate_beethoven
 from models.folk_model.folk_model import generate_folk
 from models.lofi_model.lofi_model import generate_lofi
-import os 
+#import os 
 import re
 
 
