@@ -203,6 +203,6 @@ def generate_pokemon(n_steps, temperature, file_name='untitled'):
   
   
 if __name__ == "__main__":
-  generate_pokemon(100, 1.0)
+  generate_pokemon(100, 0.8)
 
   

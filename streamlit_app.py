@@ -166,15 +166,24 @@ if choice == 'Login':
                         else:
                             with st.spinner("Generating..."):
                                 
-                                match genre:
-                                    case "Classic":
-                                        generate_beethoven(file_name=file_name,n_steps=num_steps, temperature=predictability)         
-                                    case "Gaming":
-                                        generate_pokemon(file_name=file_name,n_steps=num_steps, temperature=predictability)
-                                    case "Folk":
-                                        generate_folk(file_name=file_name,n_steps=num_steps, temperature=predictability)
-                                    case "Lofi":
-                                        generate_lofi(file_name=file_name,n_steps=num_steps, temperature=predictability)
+                                if genre == 'Classic':
+                                    generate_beethoven(file_name=file_name,n_steps=num_steps, temperature=predictability)
+                                elif  genre == 'Gaming':
+                                    generate_pokemon(file_name=file_name,n_steps=num_steps, temperature=predictability)
+                                elif  genre == 'Folk':
+                                    generate_folk(file_name=file_name,n_steps=num_steps, temperature=predictability)
+                                elif  genre == 'Lofi':
+                                    generate_lofi(file_name=file_name,n_steps=num_steps, temperature=predictability)
+                                
+                                # match genre:
+                                #     case "Classic":
+                                #         generate_beethoven(file_name=file_name,n_steps=num_steps, temperature=predictability)         
+                                #     case "Gaming":
+                                #         generate_pokemon(file_name=file_name,n_steps=num_steps, temperature=predictability)
+                                #     case "Folk":
+                                #         generate_folk(file_name=file_name,n_steps=num_steps, temperature=predictability)
+                                #     case "Lofi":
+                                #         generate_lofi(file_name=file_name,n_steps=num_steps, temperature=predictability)
                                         
                                         
                                 with open(file_name+'.mid', 'rb') as fp:

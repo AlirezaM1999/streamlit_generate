@@ -206,6 +206,6 @@ def generate_beethoven(n_steps, temperature, file_name='untitled'):
   
   
 if __name__ == "__main__":
-  generate_beethoven(100, 1.0,'testttt')
+  generate_beethoven(100, 0.8,'testttt')
 
   
