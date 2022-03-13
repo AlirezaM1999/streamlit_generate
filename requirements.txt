@@ -5,3 +5,4 @@ requests
 tensorflow
 numpy 
 music21
+pretty_midi
