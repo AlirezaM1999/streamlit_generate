@@ -15,7 +15,10 @@ from models.folk_model.folk_model import generate_folk
 from models.lofi_model.lofi_model import generate_lofi
 #import os 
 import re
-
+import numpy as np 
+import pretty_midi
+import io
+from scipy.io import wavfile
 
 # Configuration Key 
 firebaseConfig = {
@@ -185,6 +188,15 @@ if choice == 'Login':
                                 #     case "Lofi":
                                 #         generate_lofi(file_name=file_name,n_steps=num_steps, temperature=predictability)
                                         
+                                midi_data = pretty_midi.PrettyMIDI(file_name+'.mid')
+                                audio_data = midi_data.synthesize()
+                                audio_data = np.int16(
+                                    audio_data / np.max(np.abs(audio_data)) * 32767 * 0.9
+                                )  # -- Normalize 16 bit audio https://github.com/jkanner/streamlit-audio/blob/main/helper.py
+
+                                audio_file = io.BytesIO()
+                                wavfile.write(audio_file, 44100, audio_data)
+                                st.audio(audio_file)
                                         
                                 with open(file_name+'.mid', 'rb') as fp:
                                     btn = st.download_button(
@@ -193,7 +205,8 @@ if choice == 'Login':
                                         file_name=f'{file_name}.mid'
                                         
                                     )
-
+ 
+                                    
             else:
                 st.error('Invalid Email')
         else:
