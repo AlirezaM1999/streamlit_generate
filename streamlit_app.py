@@ -26,6 +26,18 @@ def load_lottie_file(url):
 lottie_file = load_lottie_file("https://assets10.lottiefiles.com/packages/lf20_xnhvhcux.json")
 
 
+def midi_to_wav(file):
+    midi_data = pretty_midi.PrettyMIDI(file)
+    audio_data = midi_data.synthesize()
+    audio_data = np.int16(
+    audio_data /
+    np.max(np.abs(audio_data)) * 32767 * 0.9
+    )  # -- Normalize 16 bit audio https://github.com/jkanner/streamlit-audio/blob/main/helper.py
+
+    audio_file = io.BytesIO()
+    wavfile.write(audio_file, 44100, audio_data)
+    st.audio(audio_file)
+
 # Configuration Key
 firebaseConfig = {
 
@@ -55,26 +67,23 @@ db = firebase.database()
 storage = firebase.storage()
 
 
-st.sidebar.title("Neural Generator")
+st.sidebar.title("Navigation Panel")
 
 
 # Authentication
 choice = st.sidebar.selectbox('Pages', ['Home','Login', 'Sign up'])
-email = st.sidebar.text_input(
-    'Please enter your email address', placeholder='Email')
-password = st.sidebar.text_input(
-    'Please enter your password', type='password', placeholder='Password')
-regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
+
 
 if choice == 'Sign up':
+    email = st.sidebar.text_input(
+        'Please enter your email address', placeholder='Email')
+    password = st.sidebar.text_input(
+        'Please enter your password', type='password', placeholder='Password')
+    regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'    
     handle = st.sidebar.text_input(
-        'Please input your app handle name', value='Default')
+            'Please input your app handle name', value='Default')
     submit = st.sidebar.button('Create my account')
     
-    
-    
-    
-
     try:
         if submit:
             if email and password:
@@ -105,14 +114,19 @@ if choice == 'Sign up':
 
 
 if choice == 'Login':
+    email = st.sidebar.text_input(
+        'Please enter your email address', placeholder='Email')
+    password = st.sidebar.text_input(
+        'Please enter your password', type='password', placeholder='Password')
     login = st.sidebar.checkbox('Login/Logout')
+    regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
 
     if login:
         if email and password:
             if re.search(regex, email):
                 user = auth.sign_in_with_email_and_password(email, password)
                 st.write(
-                    '<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
+                    '<style>div.row-widget.stRadio > div{flex-direction:row;} ', unsafe_allow_html=True)
 
                 pages = st.radio(
                     'Jump to', ['Neural Generator', 'Upload a file', 'Generated MIDIs'])
@@ -239,11 +253,20 @@ if choice == 'Login':
 if choice == 'Home':
     
     with st.container():
-    #st.subheader('Neural Music Generator', anchor='center')
-        st.markdown("<h1 style='text-align: center; color: black;'>Neural Music Generator</h1>",
-                    unsafe_allow_html=True)
-        st.markdown("<h4 style='text-align: center; color: black;'>A simple tool for creating music using AI</h4>",
-                    unsafe_allow_html=True)
+        col1,col2,col3 = st.columns(3)
+        with col1:
+            st_lottie(load_lottie_file('https://assets2.lottiefiles.com/temp/lf20_ERpSsi.json'), key=1,height=200)
+            
+        with col2:
+            #st.subheader('Neural Music Generator', anchor='center')
+            st.markdown("<h1 style='text-align: center; color: gold;'>Neural Music Generator</h1>",
+                        unsafe_allow_html=True)
+            st.markdown("<h4 style='text-align: center; color: gold;'>A simple tool for creating music using AI</h4>",
+                        unsafe_allow_html=True)
+            
+        with col3:
+            st_lottie(load_lottie_file('https://assets2.lottiefiles.com/temp/lf20_ERpSsi.json'), height=200)
+
 
 
     with st.container():
@@ -259,5 +282,43 @@ if choice == 'Home':
                 of AI-generated music </p1>  
                 """, unsafe_allow_html=True)
         with col2:
-            
             st_lottie(lottie_file, height=400)
+            
+    with st.container():
+        st.write('---')
+        st.text('') 
+        col1, col2 = st.columns(2)
+        with col1:
+            st.header('How To Get Started')
+            st.markdown(
+                """
+                <p1 style="font-size:22px;">
+                You will need to Sign up to the website to be able to use the neural generator. You can save your generated files in your profile so that you can use them later should you wish</p1> 
+            
+                <ol><b>
+                    <li> Navgiate to the sign up page</li>
+                    <li> Create an account with a valid email and password</li>
+                    <li>Head to the login page and and login using your credenmtials</li>
+                </ol>
+                """, unsafe_allow_html=True)
+            
+        with col2:
+            st.text('')
+            st.text('')
+            st.image('images/neural_gen.png')
+            
+    st.text('')    
+    with st.container():
+        st.write('---')
+        st.header('Samples')
+        st.write('Below are some of the samples created using the neural generator')
+        
+        
+        st.text('Classical Music Samples')
+        midi_to_wav('samples\classic_sample1.midi')
+        midi_to_wav('samples\classic_sample2.midi')
+        st.text('Lofi Sample')
+        midi_to_wav('samples\lofi_sample1.midi')
+        st.text('Game Music Sample')
+        midi_to_wav('samples\game_sample1.midi')
+        
