@@ -2,8 +2,6 @@ import requests
 import webbrowser
 import pyrebase
 import streamlit as st
-from fileinput import filename
-import streamlit as st
 from streamlit_lottie import st_lottie
 from models.pokemon_model.pokemon_model import generate_pokemon
 from models.beethoven_model.beethoven_model import generate_beethoven
