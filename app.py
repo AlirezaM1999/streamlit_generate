@@ -14,6 +14,7 @@ import pretty_midi
 import io
 from scipy.io import wavfile
 
+
 # Page assets
 
 def load_lottie_file(url):
@@ -294,13 +295,14 @@ if choice == 'Home':
                     <li> Navgiate to the sign up page</li>
                     <li> Create an account with a valid email and password</li>
                     <li>Head to the login page and and login using your credenmtials</li>
+                    <li>All done! You can now generate melodies</li>
                 </ol>
                 """, unsafe_allow_html=True)
             
         with col2:
             st.text('')
             st.text('')
-            st.image('images/neural_gen.png', caption='Neural Melody Generator Interface')
+            st.image('images/gen_gui.png', caption='Neural Melody Generator Interface')
             
     st.text('')    
     with st.container():
@@ -317,3 +319,6 @@ if choice == 'Home':
         st.text('Game Music Sample')
         midi_to_wav('samples\game_sample1.midi')
         
+
+
+
