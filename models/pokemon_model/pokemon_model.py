@@ -11,6 +11,7 @@ from tensorflow.keras.layers import Activation
 from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.callbacks import ModelCheckpoint, History
 import os 
+import music21
 
 
 
@@ -145,7 +146,7 @@ def remove_generated_midis():
                 # print(os.path.join(root, file))
                 os.remove(os.path.join(root, file))
 
-def create_midi(prediction_output, name):
+def create_midi(prediction_output, name, key_signature):
     
     """ convert the output from the prediction to notes and create a midi file
         from the notes """
@@ -177,12 +178,16 @@ def create_midi(prediction_output, name):
         offset += 0.5
     
     midi_stream = stream.Stream(output_notes)
+    
+    key  = midi_stream.analyze('key')
+    interval = music21.interval.Interval(key.tonic, music21.pitch.Pitch(key_signature))
+    transposed_song = midi_stream.transpose(interval)
 
-    midi_stream.write('midi', fp=name)
+    transposed_song.write('midi', fp=name)
     
     
     
-def generate_pokemon(n_steps, temperature, file_name='untitled'):
+def generate_pokemon(n_steps, temperature, file_name='untitled', key_signature='C'):
   with open('models\pokemon_model\pokemon_notes', 'rb') as fp:
     notes = pickle.load(fp)
 
@@ -198,11 +203,11 @@ def generate_pokemon(n_steps, temperature, file_name='untitled'):
   prediction_output = generate_notes(model, network_input, pitchnames, n_vocab, n_steps, temperature)
   
   file_name+='.mid'
-  create_midi(prediction_output, file_name)
+  create_midi(prediction_output, file_name, key_signature)
   
   
   
 if __name__ == "__main__":
-  generate_pokemon(100, 0.8)
+  generate_pokemon(100, 0.8,'game music')
 
   

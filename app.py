@@ -50,7 +50,7 @@ firebaseConfig = {
 
 }
 
-st.set_page_config(page_title='Neural Music Generator',
+st.set_page_config(page_title='Neural Melody Generator',
                    page_icon=':musical_note:', layout='wide')
 
 
@@ -185,14 +185,11 @@ if choice == 'Login':
                                 Find more information here""")
 
                     form = st.form(key='submit-form')
-                    genre = form.selectbox(
-                        'genre', options=['Classic', 'Gaming', 'Folk', 'Lofi'])
-                    file_name = form.text_input(
-                        'What would you like your file to be named?', placeholder='Name')
-                    num_steps = form.slider(
-                        'number of steps in 16th notes (Song length)', min_value=1, value=200, step=10, max_value=400)
-                    predictability = form.number_input(
-                        'predictibilty - the lower the number, the less preditable the generated output will be', min_value=0.1, max_value=1.0, step=0.1, value=0.8)
+                    file_name = form.text_input('What would you like your file to be named?', placeholder='Name')
+                    genre = form.selectbox('genre', options=['Classic', 'Gaming', 'Folk', 'Lofi'])
+                    num_steps = form.slider('number of steps in 16th notes (Song length)', min_value=1, value=200, step=10, max_value=400)
+                    key_sig = form.selectbox('Key Signature', options=['A','A#','B','C','C#','D','D#','E','F','F#','G','G#'])
+                    predictability = form.number_input( 'predictibilty - the lower the number, the less preditable the generated output will be', min_value=0.1, max_value=1.0, step=0.1, value=0.8)
                     generate_button = form.form_submit_button('Generate')
 
                     if generate_button:
@@ -203,16 +200,16 @@ if choice == 'Login':
 
                                 if genre == 'Classic':
                                     generate_beethoven(
-                                        file_name=file_name, n_steps=num_steps, temperature=predictability)
+                                        file_name=file_name, n_steps=num_steps, temperature=predictability, key_signature=key_sig)
                                 elif genre == 'Gaming':
                                     generate_pokemon(
-                                        file_name=file_name, n_steps=num_steps, temperature=predictability)
+                                        file_name=file_name, n_steps=num_steps, temperature=predictability, key_signature=key_sig)
                                 elif genre == 'Folk':
                                     generate_folk(
-                                        file_name=file_name, n_steps=num_steps, temperature=predictability)
+                                        file_name=file_name, n_steps=num_steps, temperature=predictability, key_signature=key_sig)
                                 elif genre == 'Lofi':
                                     generate_lofi(
-                                        file_name=file_name, n_steps=num_steps, temperature=predictability)
+                                        file_name=file_name, n_steps=num_steps, temperature=predictability, key_signature=key_sig)
 
                                 # match genre:
                                 #     case "Classic":
@@ -257,7 +254,7 @@ if choice == 'Home':
             
         with col2:
             #st.subheader('Neural Music Generator', anchor='center')
-            st.markdown("<h1 style='text-align: center; color: gold;'>Neural Music Generator</h1>",
+            st.markdown("<h1 style='text-align: center; color: gold;'>Neural Melody Generator</h1>",
                         unsafe_allow_html=True)
             st.markdown("<h4 style='text-align: center; color: gold;'>A simple tool for creating music using AI</h4>",
                         unsafe_allow_html=True)
@@ -303,7 +300,7 @@ if choice == 'Home':
         with col2:
             st.text('')
             st.text('')
-            st.image('images/neural_gen.png')
+            st.image('images/neural_gen.png', caption='Neural Melody Generator Interface')
             
     st.text('')    
     with st.container():
