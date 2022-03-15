@@ -36,7 +36,7 @@ def create_network2(network_input, n_vocab):
     model.compile(loss='categorical_crossentropy', optimizer='rmsprop')
 
     # Load the weights to each node
-    model.load_weights('models\pokemon_model\pokemon_weights.hdf5')
+    model.load_weights('models/pokemon_model/pokemon_weights.hdf5')
 
     return model
 
@@ -188,7 +188,7 @@ def create_midi(prediction_output, name, key_signature):
     
     
 def generate_pokemon(n_steps, temperature, file_name='untitled', key_signature='C'):
-  with open('models\pokemon_model\pokemon_notes', 'rb') as fp:
+  with open('models/pokemon_model/pokemon_notes', 'rb') as fp:
     notes = pickle.load(fp)
 
   pitchnames = sorted(set(item for item in notes))
