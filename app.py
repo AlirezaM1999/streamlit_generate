@@ -124,8 +124,7 @@ if choice == 'Login':
         if email and password:
             if re.search(regex, email):
                 user = auth.sign_in_with_email_and_password(email, password)
-                st.write(
-                    '<style>div.row-widget.stRadio > div{flex-direction:row;} ', unsafe_allow_html=True)
+                st.write('<style>div.row-widget.stRadio > div{flex-direction:row;} ', unsafe_allow_html=True)
 
                 pages = st.radio(
                     'Jump to', ['Neural Generator', 'Upload a file', 'Generated MIDIs'])
@@ -157,17 +156,23 @@ if choice == 'Login':
                     Audio = db.child(user['localId']).child(
                         'Audio_Files').get()
                     file_choices = []
+                    
+                    
+                    st.subheader('A list of all your uploaded files')
 
                     try:
                         for i in Audio.each():
                             i_choice = i.val()
                             file_choices.append(i_choice)
                             st.write(i_choice)
+                            
+                        st.write('---')
+                        st.subheader('Delete A File')
 
-                        file_to_be_downloaded = st.radio(
-                            'Select the file you would like to download', file_choices)
-                        if st.button('Download'):
-                            webbrowser.open(file_to_be_downloaded)
+                        file_to_be_downloaded = st.selectbox(
+                            'Select the file you would like to Delete', file_choices)
+                        # if st.button('Download'):
+                        #     webbrowser.open(file_to_be_downloaded)
                         if st.button('Delete'):
                             for i in Audio.each():
                                 if i.val() == file_to_be_downloaded:
