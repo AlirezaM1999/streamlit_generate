@@ -312,12 +312,12 @@ if choice == 'Home':
         
         
         st.text('Classical Music Samples')
-        midi_to_wav('samples\classic_sample1.midi')
-        midi_to_wav('samples\classic_sample2.midi')
+        midi_to_wav('samples/classic_sample1.midi')
+        midi_to_wav('samples/classic_sample2.midi')
         st.text('Lofi Sample')
-        midi_to_wav('samples\lofi_sample1.midi')
+        midi_to_wav('samples/lofi_sample1.midi')
         st.text('Game Music Sample')
-        midi_to_wav('samples\game_sample1.midi')
+        midi_to_wav('samples/game_sample1.midi')
         
 
 
