@@ -162,11 +162,12 @@ if choice == 'Login':
                         for i in Audio.each():
                             i_choice = i.val()
                             file_choices.append(i_choice)
+                            st.write(i_choice)
 
                         file_to_be_downloaded = st.radio(
                             'Select the file you would like to download', file_choices)
                         if st.button('Download'):
-                            webbrowser.open_new_tab(file_to_be_downloaded)
+                            webbrowser.open(file_to_be_downloaded)
                         if st.button('Delete'):
                             for i in Audio.each():
                                 if i.val() == file_to_be_downloaded:
