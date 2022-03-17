@@ -125,33 +125,6 @@ elif login_or_signup == 'Login':
                     st.sidebar.error('Email does not exist')
         else:
             st.sidebar.error('Please fill all the fields')
-                    
-
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-
 
 
     
@@ -250,7 +223,7 @@ elif nav_bar == 'Home':
         st.write('---')
         col1, col2 = st.columns(2)
         with col1:
-            st.header("How It works")
+            st.header("Music Generated Entirely With AI")
             st.markdown(
                 """
                 <p1 style="font-size:23px;">
@@ -380,6 +353,73 @@ elif nav_bar == 'Account':
             
     else:
         st.warning('Please login to see account information')
+        
+elif nav_bar == 'How It Works':
+    with st.container():
+            st.write('---')
+            col1, col2 = st.columns(2)
+            with col1:
+                st.header("Artificial Neural Networks")
+                st.markdown(
+                    """
+                    <p1 style="font-size:20px;">
+                    Neural Networks Form the base of deep learning, A subfield of machine learning where the alogrithms are inspired by the structure of the human brain. 
+                    Neural networks take in data and train themselves to recoginise the patterns and predict the output for new sets of data.
+                    </p1>  
+                    """, unsafe_allow_html=True)
+                
+            with col2:
+                st.image('images/neural_nerworks.png')
+                
+    with st.container():
+        st.header("Neural Networks Structure")
+        st.markdown(
+            """
+            <p1 style="font-size:20px;">
+            Neural Networks are made of layers of neurons. The neurons are the core processing units of the network. The first layer of the network is the input layer which recives the input data.
+            The output layer predicts our final output. In between, There are hidden layers which perform most of the computation. The ouput for each layer is passed as input for the next layer
+            until we reach the final layer. 
+            </p1>  
+            """, unsafe_allow_html=True)
+        st.write('')
+        st.image('images/nn_structure.png', width=500, caption='A Basic Neural Networks Structure')
+        
+        
+    with st.container():
+        st.header("Types Of Neural Networks")
+        st.markdown(
+            """
+            <p1 style="font-size:20px;">
+            Technology is moving very fast specially in deep learning as new techniques and tools are developed everyday. while there are many types of neural networks, There are 3 common types;
+            <b>Artificial Neural Networks(ANN)</b>, <b>Convolutional Neural Networks (CNN)</b> and <b>Recurrent Neural</b>. ANN is the classic neural network that was discussed. ANNs are versitile allround and used 
+            in a variety of fields in deep learning. CNNs mainly prevellent image and video processing. CNNs have filters which extract the common features from images which are then used to 
+            classify images. 
+            </p1>  
+            </br>
+            </br>
+            <p1 style="font-size:20px;">
+            Reccurent Neural Networks on the other hand are desinged to deal with sequential data. This can be things such as weather forecast, text or musical notes where each datapoint dependent on its other datapoints.
+            This is unlike CNNs and ANNs where datapoints are indepdent. RNNs are specially good for sequential data as they have sequential memory. RNNs have a looping  mechanism that acts a highway to allow information to flow
+            from one step to the next which is called <b>hidden state </b>. This allows them to remmeber information about privious datapoints which subsequently determines the outcome for the next datapoint.
+            </p1>
+            """, unsafe_allow_html=True)
+        
+        st.write('')
+
+        st.image('images/rnn.jpeg', width=600, caption='Recurrent Neural Network')
+        
+    with st.container():
+        st.header("Music Generation Using Recurrent Neural Network")
+        st.markdown(
+            """
+            <p1 style="font-size:20px;">
+            Technology is moving very fast specially in deep learning as new techniques and tools are developed everyday. while there are many types of neural networks, There are 3 common types;
+            <b>Artificial Neural Networks(ANN)</b>, <b>Convolutional Neural Networks (CNN)</b> and <b>Recurrent Neural</b>. ANN is the classic neural network that was discussed. ANNs are versitile allround and used 
+            in a variety of fields in deep learning. CNNs mainly prevellent image and video processing. CNNs have filters which extract the common features from images which are then used to 
+            classify images. 
+            </p1>  
+
+            """, unsafe_allow_html=True)
 
 
     
