@@ -13,6 +13,7 @@ import pretty_midi
 import io
 from scipy.io import wavfile
 from streamlit_option_menu import option_menu
+import time
 
 # Page assets
 st.set_page_config(page_title='Neural Melody Generator',
@@ -60,6 +61,98 @@ auth = firebase.auth()
 # Database
 db = firebase.database()
 storage = firebase.storage()
+
+login_or_signup = st.sidebar.selectbox(options=['Login', 'Signup'], label='Account')
+
+
+            
+if login_or_signup == 'Signup':          
+    email = st.sidebar.text_input('Please enter your email address', placeholder='Email')
+    password = st.sidebar.text_input(
+    'Please enter your password', type='password', placeholder='Password')
+    regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'    
+    handle = st.sidebar.text_input('Please input your app handle name', value='Default')
+    submit = st.sidebar.button('Create my account')
+    Login = st.sidebar.checkbox('Login/Logout', disabled=True)
+    
+    
+    try:
+        if submit:
+            if email and password:
+                if re.search(regex, email):
+                    user = auth.create_user_with_email_and_password(
+                        email, password)
+                    st.sidebar.success('Your account is created successfully!')
+                    st.balloons()
+
+                    # Sign in
+                    user = auth.sign_in_with_email_and_password(
+                        email, password)
+
+                    # creating a tree with the name localID with two child leafs that have values
+                    db.child(user["localId"]).child("Handle").set(handle)
+                    # givin the name of tree branch(localid) to the name
+                    db.child(user["localId"]).child("ID").set(user["localId"])
+                    # the ID is the same as the Auth UIID
+
+                else:
+                    st.sidebar.error('Invalid Email')
+            else:
+                st.sidebar.error('Please fill email and password fields')
+
+    except requests.HTTPError as f:
+        st.sidebar.error('Error! Email is already registered or Password is too weak')
+            
+elif login_or_signup == 'Login':
+    email = st.sidebar.text_input('Email', placeholder='JohnDoe@gmail.com')
+    password = st.sidebar.text_input('Password', type='password', placeholder='Password')
+    Login = st.sidebar.checkbox('Login/Logout')
+    regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$' 
+    
+    
+    if Login:
+        if email and password: 
+            try:
+                if re.search(regex, email):
+                    user = auth.sign_in_with_email_and_password(email, password)
+                    
+                else:
+                    st.sidebar.error('Please enter a valid email or password')
+            except requests.HTTPError as f:
+                if email:
+                    st.sidebar.error('Email or Password incorreect')
+                else:
+                    st.sidebar.error('Email does not exist')
+        else:
+            st.sidebar.error('Please fill all the fields')
+                    
+
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+
+
 
     
 nav_bar = option_menu(None, ["Home", "How It Works",'Neural Generator',"Account","About"], 
@@ -208,116 +301,87 @@ elif nav_bar == 'Home':
         midi_to_wav('samples/game_sample1.midi')
         
 elif nav_bar == 'Account':
-    login_or_signup = st.selectbox(options=['Login', 'Signup'],label='')
-    if login_or_signup == 'Login':
-            email = st.text_input(
-            'Please enter your email address', placeholder='Email')
-            password = st.text_input(
-            'Please enter your password', type='password', placeholder='Password')
-            login = st.checkbox('Login/Logout')
-            regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
+    # login_or_signup = st.selectbox(options=['Login', 'Signup'],label='')
+    # if login_or_signup == 'Login':
+    #         email = st.text_input(
+    #         'Please enter your email address', placeholder='Email')
+    #         password = st.text_input(
+    #         'Please enter your password', type='password', placeholder='Password')
+    #         login = st.checkbox('Login/Logout')
+    #         regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
             
 
+   
+    if Login:
+        # if Email and password:
+        #     if re.search(regex, email):
+        #         user = auth.sign_in_with_email_and_password(email, password)
+        st.write('<style>div.row-widget.stRadio > div{flex-direction:row;} ', unsafe_allow_html=True)
 
-            if login:
-                if email and password:
-                    if re.search(regex, email):
-                        user = auth.sign_in_with_email_and_password(email, password)
-                        st.write('<style>div.row-widget.stRadio > div{flex-direction:row;} ', unsafe_allow_html=True)
+        # pages = st.radio(
+        #     'Jump to', ['Neural Generator', 'Upload a file', 'Generated MIDIs'])
 
-                        # pages = st.radio(
-                        #     'Jump to', ['Neural Generator', 'Upload a file', 'Generated MIDIs'])
+        # if pages == 'Upload a file':
+        st.write('---')
+        st.subheader('Upload A File')
+        uploaded_file = st.file_uploader('Choose a file')
+        upload = st.button('Upload')
 
-                        # if pages == 'Upload a file':
-                        st.write('---')
-                        st.subheader('Upload A File')
-                        uploaded_file = st.file_uploader('Choose a file')
-                        upload = st.button('Upload')
+        if upload:
+            try:
 
-                        if upload:
-                            try:
+                uid = user['localId']
+                # fireb_upload = storage.child(uid).put(uploaded_file, user['idToken'])
+                # stored_file = storage.child(uid).get_url(fireb_upload['downloadTokens'])
+                # db.child(uid).child('Audio_Files').push(stored_file)
+                # st.success('File successfully uploaded')
+                fireb_upload = storage.child(uploaded_file.name).put(
+                    uploaded_file, user['idToken'])
+                stored_file = storage.child(uploaded_file.name).get_url(
+                    fireb_upload['downloadTokens'])
+                db.child(uid).child(
+                    'Audio_Files').push(stored_file)
+                st.success('File successfully uploaded')
 
-                                uid = user['localId']
-                                # fireb_upload = storage.child(uid).put(uploaded_file, user['idToken'])
-                                # stored_file = storage.child(uid).get_url(fireb_upload['downloadTokens'])
-                                # db.child(uid).child('Audio_Files').push(stored_file)
-                                # st.success('File successfully uploaded')
-                                fireb_upload = storage.child(uploaded_file.name).put(
-                                    uploaded_file, user['idToken'])
-                                stored_file = storage.child(uploaded_file.name).get_url(
-                                    fireb_upload['downloadTokens'])
-                                db.child(uid).child(
-                                    'Audio_Files').push(stored_file)
-                                st.success('File successfully uploaded')
-
-                            except:
-                                st.error('Please select a file to upload!')
-                                
-                                
-                        
-                        Audio = db.child(user['localId']).child('Audio_Files').get()
-                        file_choices = []
+            except:
+                st.error('Please select a file to upload!')
                 
-                        st.write('---')
-                        st.subheader('A list of all your uploaded files')
-
-                        try:
-                            for i in Audio.each():
-                                i_choice = i.val()
-                                file_choices.append(i_choice)
-                                st.write(i_choice)
-                                
-                            st.write('---')
-                            st.subheader('Delete A File')
-
-                            file_to_be_downloaded = st.selectbox(
-                                'Select the file you would like to Delete', file_choices)
-                            # if st.button('Download'):
-                            #     webbrowser.open(file_to_be_downloaded)
-                            if st.button('Delete'):
-                                for i in Audio.each():
-                                    if i.val() == file_to_be_downloaded:
-                                        db.child(user['localId']).child(
-                                            'Audio_Files').child(i.key()).remove()
-                                        st.experimental_rerun()
-
-                        except TypeError:
-                            st.info('No Files')
-    if login_or_signup == 'Signup':          
-        email = st.text_input('Please enter your email address', placeholder='Email')
-        password = st.text_input(
-        'Please enter your password', type='password', placeholder='Password')
-        regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'    
-        handle = st.text_input('Please input your app handle name', value='Default')
-        submit = st.button('Create my account')
+                
         
-        
+        Audio = db.child(user['localId']).child('Audio_Files').get()
+        file_choices = []
+
+        st.write('---')
+        st.subheader('A list of all your uploaded files')
+
         try:
-            if submit:
-                if email and password:
-                    if re.search(regex, email):
-                        user = auth.create_user_with_email_and_password(
-                            email, password)
-                        st.success('Your account is created successfully!')
-                        st.balloons()
+            for i in Audio.each():
+                i_choice = i.val()
+                file_choices.append(i_choice)
+                st.write(i_choice)
+                
+            st.write('---')
+            st.subheader('Delete A File')
 
-                        # Sign in
-                        user = auth.sign_in_with_email_and_password(
-                            email, password)
+            file_to_be_downloaded = st.selectbox(
+                'Select the file you would like to Delete', file_choices)
+            # if st.button('Download'):
+            #     webbrowser.open(file_to_be_downloaded)
+            if st.button('Delete'):
+                for i in Audio.each():
+                    if i.val() == file_to_be_downloaded:
+                        db.child(user['localId']).child(
+                            'Audio_Files').child(i.key()).remove()
+                        st.experimental_rerun()
+                        
 
-                        # creating a tree with the name localID with two child leafs that have values
-                        db.child(user["localId"]).child("Handle").set(handle)
-                        # givin the name of tree branch(localid) to the name
-                        db.child(user["localId"]).child("ID").set(user["localId"])
-                        # the ID is the same as the Auth UIID
+        except TypeError:
+            st.info('No Files')
+            
+    else:
+        st.warning('Please login to see account information')
 
-                    else:
-                        st.warning('Invalid Email')
-                else:
-                    st.error('Please fill email and password fields')
 
-        except requests.HTTPError as f:
-            st.error('Error! Email is already registered or Password is too weak')
     
             
 
