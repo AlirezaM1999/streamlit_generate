@@ -116,6 +116,7 @@ elif login_or_signup == 'Login':
                 if re.search(regex, email):
                     user = auth.sign_in_with_email_and_password(email, password)
                     
+                    
                 else:
                     st.sidebar.error('Please enter a valid email or password')
             except requests.HTTPError as f:
@@ -141,17 +142,18 @@ styles={
 if nav_bar == 'Neural Generator':
         st.title('Neural Generator')
         st.text(
-        'AI that generates music melodies with a variety og genres')
+        'Select your preference and get your free AI generated melody')
         st.markdown("""
                 Find more information here""")
 
         form = st.form(key='submit-form')
-        file_name = form.text_input('What would you like your file to be named?', placeholder='Name')
+        file_name = form.text_input('What would you like your file to be named? (The name must be unique)', placeholder='Name')
         genre = form.selectbox('genre', options=['Classic', 'Gaming', 'Folk', 'Lofi'])
         num_steps = form.slider('number of steps in 16th notes (Song length)', min_value=1, value=200, step=10, max_value=400)
         key_sig = form.selectbox('Key Signature', options=['A','A#','B','C','C#','D','D#','E','F','F#','G','G#'])
         predictability = form.number_input( 'predictibilty - the lower the number, the less preditable the generated output will be', min_value=0.1, max_value=1.0, step=0.1, value=0.8)
         generate_button = form.form_submit_button('Generate')
+        
 
         if generate_button:
             if not file_name:
@@ -193,7 +195,10 @@ if nav_bar == 'Neural Generator':
                     audio_file = io.BytesIO()
                     wavfile.write(audio_file, 44100, audio_data)
                     st.audio(audio_file)
-
+                    
+                    
+                    
+                        
                     with open(file_name+'.mid', 'rb') as fp:
                         btn = st.download_button(
                             label='Download Midi File',
@@ -201,6 +206,39 @@ if nav_bar == 'Neural Generator':
                             file_name=f'{file_name}.mid'
 
                     )
+                    
+                        
+       
+        if st.button('Save File'):
+                                      
+            if file_name:
+                if Login:
+                    uid = user['localId']
+                    fireb_upload = storage.child(uid+'_'+file_name+'.mid').put(file_name+'.mid', user['idToken'])
+                    stored_file = storage.child(uid+'_'+file_name+'.mid').get_url(fireb_upload['downloadTokens'])
+                    db.child(uid).child('Audio_Files').push(stored_file) 
+                    st.success('Done!')
+                    time.sleep(0.4)
+                    st.experimental_rerun()
+                       
+                     
+                else:
+                    st.error('Please login to save your files')     
+                    
+            else:
+                st.error('Please generate a file first')  
+             
+     
+                            
+       
+# Audio = db.child(user['localId']).child('Audio_Files').get()      
+# if st.button('Delete'):
+#     for i in Audio.each():
+#         if i.val() == file_to_be_downloaded:
+#             db.child(user['localId']).child(
+#                 'Audio_Files').child(i.key()).remove()
+#             st.experimental_rerun()       
+                        
 elif nav_bar == 'Home':
     with st.container():
         col1,col2,col3 = st.columns(3)
@@ -308,9 +346,9 @@ elif nav_bar == 'Account':
                 # stored_file = storage.child(uid).get_url(fireb_upload['downloadTokens'])
                 # db.child(uid).child('Audio_Files').push(stored_file)
                 # st.success('File successfully uploaded')
-                fireb_upload = storage.child(uploaded_file.name).put(
+                fireb_upload = storage.child(uid+'_'+uploaded_file.name).put(
                     uploaded_file, user['idToken'])
-                stored_file = storage.child(uploaded_file.name).get_url(
+                stored_file = storage.child(uid+'_'+uploaded_file.name).get_url(
                     fireb_upload['downloadTokens'])
                 db.child(uid).child(
                     'Audio_Files').push(stored_file)
