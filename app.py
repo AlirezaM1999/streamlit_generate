@@ -583,7 +583,7 @@ elif nav_bar == "About":
             st.markdown(
     
             """
-                 <p style="font-size:25px;">
+                 <p style="font-size:20px;">
                 On my freetime, I like to work create python web apps to:
                 <ul>
                     <li>learn to leverage the power of Python in in web development</li>
@@ -594,6 +594,8 @@ elif nav_bar == "About":
                 """
             , unsafe_allow_html=True)
             st.write("[My github >](https://github.com/AlirezaM1999)")
+            st.write('#')
+            st.markdown('<p style="font-size:20px;">You also find the source code for the app <a href="https://github.com/AlirezaM1999/streamlit_generate"> here</a></p>',unsafe_allow_html=True)
               
         with col2:
             st_lottie(load_lottie_file('https://assets1.lottiefiles.com/packages/lf20_bp5lntrf.json'),width=550)
@@ -606,7 +608,7 @@ elif nav_bar == "About":
         st.markdown(
                 
                 """
-                <p1 style="font-size:14px;">
+                <p1 style="font-size:16px;">
                The Software product may include certain open source components that are subject to open source licenses (“Open Source Software”), in which case, the embedded Open Source Software is owned by a third party.
                The Open Source Software is not subject to the terms and conditions of this EULA. Instead, each item of Open Source Software is licensed under its applicable license terms which accompanies such Open Source Software.
                Nothing in this EULA limits your rights under, nor grants you rights that supersede, the terms and conditions of any applicable license terms for the Open Source Software. Any fees charged by GC in connection with the SOFTWARE, do not apply to the Open Source Software for which fees may not be charged under the applicable license terms.
