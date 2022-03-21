@@ -2,7 +2,7 @@ import requests
 import webbrowser
 import pyrebase
 import streamlit as st
-from streamlit_lottie import st_lottie
+from streamlit_lottie import st_lottie, st_lottie_spinner
 from models.pokemon_model.pokemon_model import generate_pokemon
 from models.beethoven_model.beethoven_model import generate_beethoven
 from models.folk_model.folk_model import generate_folk
@@ -76,8 +76,29 @@ footer:after{
     position: relative;
     color:tomato;
 }
+
 </style>
+
 """
+
+
+st.markdown("""
+        <style>
+            .css-18e3th9 {
+                    padding-top: 1rem;
+                    padding-bottom: 10rem;
+                    padding-left: 5rem;
+                    padding-right: 5rem;
+                }
+            .css-1d391kg {
+                    padding-top: 3.5rem;
+                    padding-right: 1rem;
+                    padding-bottom: 3.5rem;
+                    padding-left: 1rem;
+                }
+        </style>
+        """, unsafe_allow_html=True)
+
 
 st.markdown(customise_css, unsafe_allow_html=True)
 
@@ -147,12 +168,12 @@ elif login_or_signup == 'Login':
 
     
 nav_bar = option_menu(None, ["Home", "How It Works",'Neural Generator',"Account","About"], 
-icons=['house', 'music-note-beamed', "file-person"], 
+icons=['house', 'info-circle', "music-note-beamed","person-circle"], 
 menu_icon="cast", default_index=0, orientation="horizontal",
 styles={
     "container": {"padding": "2!important", "background-color": "#fffff"},
     "icon": {"color": "orange", "font-size": "20px"}, 
-    "nav-link": {"font-size": "20px", "text-align": "left", "margin":"5px", "--hover-color": "black"},
+    "nav-link": {"font-size": "20px", "text-align": "left", "margin":"5px", "--hover-color": "grey"},
     "nav-link-selected": {"background-color": ""},
 }
 )
@@ -173,12 +194,15 @@ if nav_bar == 'Neural Generator':
                                            help='Temperature determines the rate at which the model picks the highest probabilstic output, i.e if the temperature is 0.8, theres a %80 chance that the model is going pick the the output with the highest probablity')
         generate_button = form.form_submit_button('Generate')
         
+        
+
+        
 
         if generate_button:
             if not file_name:
                 st.error('Please enter a name')
             else:
-                with st.spinner("Generating..."):
+                with st.spinner('Generating'):
 
                     if genre == 'Classic':
                         generate_beethoven(
@@ -397,7 +421,7 @@ elif nav_bar == 'Account':
 elif nav_bar == 'How It Works':
     with st.container():
             st.write('---')
-            col1, col2 = st.columns(2)
+            col1, col2 = st.columns((1.2,1))
             with col1:
                 st.header("Artificial Neural Networks")
                 st.markdown(
@@ -441,10 +465,10 @@ elif nav_bar == 'How It Works':
             """, unsafe_allow_html=True)
         
         
-        col1, col2, col3 = st.columns(3)
+        col1, col2 = st.columns((1,2))
         with col1:
             st.image('images/nn_structure.png', width=550, caption='A Basic Neural Networks Structure')
-        with col3:
+        with col2:
             st.image('images/cnn.jpeg', width=600, caption='Convolutional Neural Network')
         
         st.write('')
@@ -491,7 +515,7 @@ elif nav_bar == 'How It Works':
         with col2:
             for _ in range(17):
                 st.text('')
-            st.image('images/rnn_pics.gif', width=900, caption='Working of Reucurrent Neural Network')
+            st.image('images/rnn_pics.gif', width=850, caption='Working of Reucurrent Neural Network')
 
 
     st.write('---')
@@ -519,7 +543,7 @@ elif nav_bar == 'How It Works':
             """, unsafe_allow_html=True)
         st.text('')
         st.text('')
-        col1, col2 = st.columns(2)
+        col1, col2 = st.columns((1.2,1))
         with col1:
            st.image('images/melody_rnn.png', width=800, caption='we pass sets of songs and melodies to train our neural network. Network gradually learns to predict the next note when given a set of notes')
         with col2:
@@ -529,7 +553,66 @@ elif nav_bar == 'How It Works':
         
         
 elif nav_bar == "About":
-        st.write('hello ')
-                
+    with st.container():
+        st.subheader("Hi, I am Alireza :wave:")
+        st.title('A Computer Science Graduate from UK')
+        st.markdown(
+            """
+            <p1 style="font-size:20px;">
+             A Computer Science Graduate from UK
+            </p1>
+            </br>
+            <p1 style="font-size:20px;">
+            I am passionate about find ways to use python to create apps and websites for a more efficient and less time consuming data science experience
+            </p1> 
 
+            """, unsafe_allow_html=True)
+        st.write("[My profile >](https://www.linkedin.com/in/alireza1999/)")
+        
+        
+    with st.container():
+        st.write('---')
+        col1, col2 = st.columns((2,1))
+        
+        with col1:
+            st.header('What I do')
+            st.write('##')
+            st.markdown('<p style="font-size:20px;">I am currently a third year Computer Science student with a burning passion with python and machine learning </p>', unsafe_allow_html=True)
+            
+            
+            st.markdown(
+    
+            """
+                 <p style="font-size:25px;">
+                On my freetime, I like to work create python web apps to:
+                <ul>
+                    <li>learn to leverage the power of Python in in web development</li>
+                    <li>learn Data Analysis & Data Science to perform meaningful and impactful analyses</li>
+                    <li>Leverage AI and machine learning to automate the boring stuff- "There is always an easier way"</li>
+                </ul> 
+                </p> 
+                """
+            , unsafe_allow_html=True)
+            st.write("[My github >](https://github.com/AlirezaM1999)")
+              
+        with col2:
+            st_lottie(load_lottie_file('https://assets1.lottiefiles.com/packages/lf20_bp5lntrf.json'),width=550)
+            
+            
+    with st.container():
+        st.write('---')
+        st.subheader('Copyright Disclaimer')
+        
+        st.markdown(
+                
+                """
+                <p1 style="font-size:14px;">
+               The Software product may include certain open source components that are subject to open source licenses (“Open Source Software”), in which case, the embedded Open Source Software is owned by a third party.
+               The Open Source Software is not subject to the terms and conditions of this EULA. Instead, each item of Open Source Software is licensed under its applicable license terms which accompanies such Open Source Software.
+               Nothing in this EULA limits your rights under, nor grants you rights that supersede, the terms and conditions of any applicable license terms for the Open Source Software. Any fees charged by GC in connection with the SOFTWARE, do not apply to the Open Source Software for which fees may not be charged under the applicable license terms.
+               The terms and conditions of the applicable license for the Open Source Software are available on the LICENSE.txt file, which is provided with the SOFTWARE.
+                </p1>
+                """
+            , unsafe_allow_html=True)
+        
 
