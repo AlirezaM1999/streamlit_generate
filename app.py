@@ -17,7 +17,8 @@ import time
 
 # Page assets
 st.set_page_config(page_title='Neural Melody Generator',
-                   page_icon=':musical_note:', layout='wide')
+                   page_icon=':musical_note:', layout='wide',
+                   initial_sidebar_state="collapsed")
 
 def load_lottie_file(url):
     r = requests.get(url)
@@ -62,9 +63,25 @@ auth = firebase.auth()
 db = firebase.database()
 storage = firebase.storage()
 
+
+
+customise_css = """
+<style>
+footer{
+    visibility:hidden;
+}
+footer:after{
+    content: 'Copyright @ 2022: Alireza M';
+    display:block;
+    position: relative;
+    color:tomato;
+}
+</style>
+"""
+
+st.markdown(customise_css, unsafe_allow_html=True)
+
 login_or_signup = st.sidebar.selectbox(options=['Login', 'Signup'], label='Account')
-
-
             
 if login_or_signup == 'Signup':          
     email = st.sidebar.text_input('Please enter your email address', placeholder='Email')
@@ -147,11 +164,13 @@ if nav_bar == 'Neural Generator':
                 Find more information here""")
 
         form = st.form(key='submit-form')
-        file_name = form.text_input('What would you like your file to be named? (The name must be unique)', placeholder='Name')
-        genre = form.selectbox('genre', options=['Classic', 'Gaming', 'Folk', 'Lofi'])
-        num_steps = form.slider('number of steps in 16th notes (Song length)', min_value=1, value=200, step=10, max_value=400)
+        file_name = form.text_input('Select a unique name for your file', placeholder='Name', help='The name must be unique to prevent the file from being overidden if you generate a file with the same name')
+        genre = form.selectbox('Genre', options=['Classic', 'Gaming', 'Folk', 'Lofi'])
+        num_steps = form.slider('Number of steps to predict', min_value=1, value=200, step=10, max_value=400,
+                                help='The number of musical steps you want the model the predict, the higher the number of steps, the longer the melody is going to be. You can think of this as the number of notes you want the model to predict from the start')
         key_sig = form.selectbox('Key Signature', options=['A','A#','B','C','C#','D','D#','E','F','F#','G','G#'])
-        predictability = form.number_input( 'predictibilty - the lower the number, the less preditable the generated output will be', min_value=0.1, max_value=1.0, step=0.1, value=0.8)
+        predictability = form.number_input( 'Temperature - the lower the number, the less preditable the generated output will be', min_value=0.1, max_value=1.0, step=0.1, value=0.8,
+                                           help='Temperature determines the rate at which the model picks the highest probabilstic output, i.e if the temperature is 0.8, theres a %80 chance that the model is going pick the the output with the highest probablity')
         generate_button = form.form_submit_button('Generate')
         
 
@@ -507,6 +526,10 @@ elif nav_bar == 'How It Works':
             st.image('images/predict.png', width=800, caption='The predicted note is then appended to the seed melody and then fed back in to the network to predict the next note. this process happens with same number of steps the user has specified')
             
         st.text('') 
+        
+        
+elif nav_bar == "About":
+        st.write('hello ')
                 
 
 
