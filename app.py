@@ -8,7 +8,7 @@ from pages.account_page import show_account_page
 from pages.about_page import *
 from pages.log_in import login_func
 from pages.sign_up import signup_func
-
+import time
 
 
 def configure_streamlit():
@@ -85,6 +85,8 @@ def main(db, storage, auth):
     user = None   
     login_or_signup = st.sidebar.selectbox(
         options=['Login', 'Signup'], label='Account')
+    
+
 
     if login_or_signup == 'Signup':
         email = st.sidebar.text_input(
@@ -107,6 +109,25 @@ def main(db, storage, auth):
         regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
         
         user = login_func(Login, email, password, regex, auth)
+        
+        
+        if not Login:
+            with st.sidebar.expander('Forgot password?'):
+                email = st.text_input('Enter your email', placeholder='JohnDoe@gmail.com')
+                reset_pass = st.button('Submit')
+                if reset_pass:
+                    if email:
+                        try:
+                            auth.send_password_reset_email(email)
+                            st.success('Reset link sent! Check your inbox')
+                            
+                        except:
+                            st.error('Email not found!')
+                    else:
+                        st.error('Enter a valid email')
+                    
+            
+        
 
 
 
