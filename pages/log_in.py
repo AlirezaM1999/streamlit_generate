@@ -8,10 +8,13 @@ def login_func(Login, email, password, regex, auth):
         if email and password:
             try:
                 if re.search(regex, email):
-                    user = auth.sign_in_with_email_and_password(
-                        email, password)
-                    
-                    return user 
+                    user = auth.sign_in_with_email_and_password(email, password)
+                    user_info = auth.get_account_info(user['idToken'])
+                    if user_info['users'][0]['emailVerified']:
+                        st.sidebar.success('Successfully logged in')
+                        return user 
+                    else:
+                        st.sidebar.error('Verify the email before logging in')
 
                 else:
                     st.sidebar.error('Please enter a valid email or password')

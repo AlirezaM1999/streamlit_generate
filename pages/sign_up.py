@@ -8,8 +8,9 @@ def signup_func(auth, db, submit, email, password, regex,handle):
         if submit:
             if email and password:
                 if re.search(regex, email):
-                    user = auth.create_user_with_email_and_password(
-                        email, password)
+                    
+                    user = auth.create_user_with_email_and_password(email, password)
+                    confirm_email = auth.send_email_verification(user['idToken'])
                     st.sidebar.success('Your account is created successfully!')
                     st.balloons()
 
