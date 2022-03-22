@@ -1,50 +1,43 @@
-import pickle
-import glob
+import pickle, os, music21
 import numpy as np
 from music21 import *
-from tensorflow.keras.models import Sequential
+from tensorflow.keras.models import Sequential, Model
 from tensorflow.keras.models import load_model
 from tensorflow.keras.layers import Dense
 from tensorflow.keras.layers import Dropout
-from tensorflow.keras.layers import  LSTM, Bidirectional
+from tensorflow.keras.layers import  LSTM, Bidirectional, Input
 from tensorflow.keras.layers import Activation
 from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.callbacks import ModelCheckpoint, History
-import os 
-import music21
 
 
-def create_network2(network_input, n_vocab):
 
+
+
+def load_network_weights(network_input, num_vocab):
+    input_layer = Input(shape=(network_input.shape[1], network_input.shape[2]))
+    hidden1 = LSTM(512, return_sequences=True)(input_layer)
+    hidden2 = Dropout(0.3)(hidden1)
+    hidden3 = LSTM(512, return_sequences=True)(hidden2)
+    hidden4 = Dropout(0.3)(hidden3)
+    hidden5 = LSTM(512)(hidden4)
+    hidden6 = Dense(256)(hidden5)
+    hidden7 = Dropout(0.3)(hidden6)
+    output_layer = Dense(num_vocab, activation='softmax')(hidden7)
     
-    """ create the structure of the neural network """
-    model = Sequential()
-    model.add(LSTM(
-        512,
-        input_shape=(network_input.shape[1], network_input.shape[2]),
-        return_sequences=True
-    ))
-    model.add(Dropout(0.3))
-    model.add(LSTM(512, return_sequences=True))
-    model.add(Dropout(0.3))
-    model.add(LSTM(512))
-    model.add(Dense(256))
-    model.add(Dropout(0.3))
-    model.add(Dense(n_vocab))
-    model.add(Activation('softmax'))
-    model.compile(loss='categorical_crossentropy', optimizer='rmsprop')
+    model = Model(input_layer, output_layer)
+    model.load_weights('models//lofi_model//lofi_weights.hdf5')
+    
+    return model 
+    
+    
 
-    # Load the weights to each node
-    model.load_weights('models/lofi_model/lofi_weights.hdf5')
-
-    return model
-
-
-def prepare_sequences2(notes, pitches, num_vocab):
+# prepare sequences to be given to the network for a prediction
+def create_sequences(notes, pitch_names, num_vocab):
     
     """ Prepare the sequences used by the Neural Network """
     # map between notes and integers and back
-    note_to_integer = dict((note, number) for number, note in enumerate(pitches))
+    note_to_int = dict((note, number) for number, note in enumerate(pitch_names))
 
     # define sequence length of 100
     sequence_length = 100
@@ -63,19 +56,19 @@ def prepare_sequences2(notes, pitches, num_vocab):
         sequence_out = notes[i + sequence_length]
         # network_input is int represenation of notes and chords from
         # sequence_in
-        network_input.append([note_to_integer[char] for char in sequence_in])
+        network_input.append([note_to_int[char] for char in sequence_in])
         # int representation of note or chord from sequence_out
-        output.append(note_to_integer[sequence_out])
+        output.append(note_to_int[sequence_out])
 
     # number of patterns eq length of network_input
-    num_patterns = len(network_input)
+    n_patterns = len(network_input)
 
     # reshape the input into a format compatible with LSTM layers
-    normalized_input_data = np.reshape(network_input, (num_patterns, sequence_length, 1))
+    normalized_network_input = np.reshape(network_input, (n_patterns, sequence_length, 1))
     # normalize input
-    normalized_input_data = normalized_input_data / float(num_vocab)
+    normalized_network_input = normalized_network_input / float(num_vocab)
 
-    return (network_input, normalized_input_data)
+    return (network_input, normalized_network_input)
 
 
 def sample_with_temperature(probabilities, temperature):
@@ -92,19 +85,20 @@ def sample_with_temperature(probabilities, temperature):
 
     return index
 
-def generate_notes(model, input_data, pitches, num_vocab, num_steps, temperature):
+#generate notes based on the given sequence
+def predict_notes(model, network_input, pitch_names, num_vocab, num_steps, temperature):
     """ Generate notes from the neural network based on a sequence of notes """
     # pick a random sequence from the input as a starting point for the prediction
     # value from 0 to length of input - 1
-    start = np.random.randint(0, len(input_data)-1)
+    start = np.random.randint(0, len(network_input)-1)
 
     # create dict with key int and value note
-    int_to_note = dict((number, note) for number, note in enumerate(pitches))
+    int_to_note = dict((number, note) for number, note in enumerate(pitch_names))
     
     # pattern is the randomly chosen starting point in the input
-    pattern = input_data[start]
+    pattern = network_input[start]
     # empty list for prediction output
-    predicted_output = []
+    prediction_output = []
 
     # generate 500 notes
     # from 0 - 499
@@ -126,7 +120,7 @@ def generate_notes(model, input_data, pitches, num_vocab, num_steps, temperature
         result = int_to_note[index]
 
         # append result to prediction_output list       
-        predicted_output.append(result)
+        prediction_output.append(result)
 
         # pattern appends index
         pattern.append(index)
@@ -134,7 +128,7 @@ def generate_notes(model, input_data, pitches, num_vocab, num_steps, temperature
         pattern = pattern[1:len(pattern)]
     
 
-    return predicted_output
+    return prediction_output
 
 def remove_generated_midis():
     exclude = set(['env'])
@@ -145,10 +139,12 @@ def remove_generated_midis():
                 # print(os.path.join(root, file))
                 os.remove(os.path.join(root, file))
 
-def create_midi_file(prediction_output, name, key_signature):
+
+def generate_midi(prediction_output, name, key_signature):
     
     """ convert the output from the prediction to notes and create a midi file
         from the notes """
+        
     remove_generated_midis()
     offset = 0
     output_notes = []
@@ -177,37 +173,38 @@ def create_midi_file(prediction_output, name, key_signature):
         offset += 0.5
     
     midi_stream = stream.Stream(output_notes)
-  
+    
+    
     key  = midi_stream.analyze('key')
     interval = music21.interval.Interval(key.tonic, music21.pitch.Pitch(key_signature))
-    transposed_song = midi_stream.transpose(interval)  
+    transposed_song = midi_stream.transpose(interval)
     
-
     transposed_song.write('midi', fp=name)
     
     
     
 def generate_lofi(n_steps, temperature, file_name='untitled', key_signature='C'):
-  with open('models/lofi_model/lofi_notes', 'rb') as fp:
-    notes = pickle.load(fp)
+    
+    with open('models//lofi_model//lofi_notes', 'rb') as fp:
+        notes = pickle.load(fp)
 
-  pitchnames = sorted(set(item for item in notes))
+    pitchnames = sorted(set(item for item in notes))
 
-  n_vocab = len(set(notes))
+    n_vocab = len(set(notes))
 
-  network_input, normalised_input = prepare_sequences2(notes, pitchnames, n_vocab)
+    network_input, normalised_input = create_sequences(notes, pitchnames, n_vocab)
 
-  model = create_network2(normalised_input, n_vocab)
-  
-  
-  prediction_output = generate_notes(model, network_input, pitchnames, n_vocab, n_steps, temperature)
-  
-  file_name+='.mid'
-  create_midi_file(prediction_output, file_name, key_signature)
+    model = load_network_weights(normalised_input, n_vocab)
+    
+    
+    prediction_output = predict_notes(model, network_input, pitchnames, n_vocab, n_steps, temperature)
+    
+    file_name+='.mid'
+    generate_midi(prediction_output, file_name, key_signature)
   
   
   
 if __name__ == "__main__":
-  generate_lofi(100, 1.0, 'lofi', 'C')
+  generate_lofi(130, 1.0,'lofi', 'D')
 
   
