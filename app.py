@@ -110,9 +110,6 @@ def main(db, storage, auth):
 
 
 
-
-
-
     nav_bar = option_menu(None, ["Home", "How It Works", 'Neural Generator', "Account", "About"],
                         icons=['house', 'info-circle',
                                 "music-note-beamed", "person-circle"],
