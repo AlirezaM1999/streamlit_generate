@@ -6,6 +6,6 @@ pyrebase4
 requests
 tensorflow
 numpy 
-music21
+music21==7.1.0
 pretty_midi
 scipy
