@@ -93,7 +93,7 @@ def main(db, storage, auth):
             'Please enter your email address', placeholder='Email')
         password = st.sidebar.text_input(
             'Please enter your password', type='password', placeholder='Password')
-        regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
+        regex = '([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+'
         handle = st.sidebar.text_input(
             'Please input your app handle name', value='Default')
         submit = st.sidebar.button('Create my account')
@@ -106,7 +106,7 @@ def main(db, storage, auth):
         password = st.sidebar.text_input(
         'Password', type='password', placeholder='Password')
         Login = st.sidebar.checkbox('Login/Logout')
-        regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
+        regex = '([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+'
         
         user = login_func(Login, email, password, regex, auth)
         
