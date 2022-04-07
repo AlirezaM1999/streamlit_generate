@@ -48,12 +48,12 @@ def hiw_page():
 
             """, unsafe_allow_html=True)
 
-        col1, col2 = st.columns((1, 2))
+        col1, col2 = st.columns((1,0.7))
         with col1:
-            st.image('images/nn_structure.png', width=550,
+            st.image('images/nn_structure.png', width=470,
                     caption='A Basic Neural Networks Structure')
         with col2:
-            st.image('images/cnn.jpeg', width=600,
+            st.image('images/cnn.jpeg', width=530,
                     caption='Convolutional Neural Network')
 
         st.write('')
@@ -91,9 +91,9 @@ def hiw_page():
                 """, unsafe_allow_html=True)
 
         with col2:
-            for _ in range(17):
+            for _ in range(18):
                 st.text('')
-            st.image('images/rnn_pics.gif', width=850,
+            st.image('images/rnn_pics.gif', width=750,
                     caption='Working of Reucurrent Neural Network')
 
     st.write('---')
@@ -121,9 +121,9 @@ def hiw_page():
         st.text('')
         col1, col2 = st.columns((1.2, 1))
         with col1:
-            st.image('images/melody_rnn.png', width=800,
+            st.image('images/melody_rnn.png', width=700,
                     caption='we pass sets of songs and melodies to train our neural network. Network gradually learns to predict the next note when given a set of notes')
         with col2:
-            st.image('images/predict.png', width=800, caption='The predicted note is then appended to the seed melody and then fed back in to the network to predict the next note. this process happens with same number of steps the user has specified')
+            st.image('images/predict.png', width=700, caption='The predicted note is then appended to the seed melody and then fed back in to the network to predict the next note. this process happens with same number of steps the user has specified')
 
         st.text('')

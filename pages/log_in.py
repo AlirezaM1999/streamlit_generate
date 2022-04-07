@@ -11,7 +11,7 @@ def login_func(Login, email, password, regex, auth):
                     user = auth.sign_in_with_email_and_password(email, password)
                     user_info = auth.get_account_info(user['idToken'])
                     if user_info['users'][0]['emailVerified']:
-                        st.sidebar.success('Successfully logged in')
+                        st.sidebar.success('Logged in')
                         return user 
                     else:
                         st.sidebar.error('Verify the email before logging in')
@@ -25,3 +25,6 @@ def login_func(Login, email, password, regex, auth):
                     st.sidebar.error('Email does not exist')
         else:
             st.sidebar.error('Please fill all the fields')
+            
+    else:
+        st.sidebar.info('Logged out')

@@ -14,11 +14,9 @@ import time
 def configure_streamlit():
     # Page settings
     st.set_page_config(page_title='Neural Melody Generator',
-                    page_icon=':musical_note:', layout='wide',
-                    initial_sidebar_state="collapsed")
-    
-    
-    #remove the default footer
+                       page_icon=':musical_note:', layout='wide')
+
+    # remove the default footer
     customise_css = """
     <style>
     footer{
@@ -35,7 +33,7 @@ def configure_streamlit():
 
     """
     st.markdown(customise_css, unsafe_allow_html=True)
-    #remove extra space from the top
+    # remove extra space from the top
     st.markdown("""
             <style>
                 .css-18e3th9 {
@@ -53,6 +51,7 @@ def configure_streamlit():
             </style>
             """, unsafe_allow_html=True)
 
+
 def configure_database():
     # Configuration Key
     firebaseConfig = {
@@ -66,8 +65,20 @@ def configure_database():
         "appId": "1:1083626971499:web:47ac2c4321b0a4840f6c2e",
         "measurementId": "G-XG4RTFPMWS"
 
-    }
+     }
 
+    # firebaseConfig = {
+
+    #     "apiKey": "AIzaSyAMRT8cCBjeN9X7C39dO0JYbkba3pg4p9A",
+    #     "authDomain": "st-fyp.firebaseapp.com",
+    #     "databaseURL": "https://st-fyp-default-rtdb.europe-west1.firebasedatabase.app",
+    #     "projectId": "st-fyp",
+    #     "storageBucket": "st-fyp.appspot.com",
+    #     "messagingSenderId": "955077353825",
+    #     "appId": "1:955077353825:web:58a7937c81f6ced8c66520",
+    #     "measurementId": "G-2DC2E6J4Z4"
+
+    # }
 
     # Firebase Authentication
     firebase = pyrebase.initialize_app(firebaseConfig)
@@ -76,17 +87,14 @@ def configure_database():
     # Database
     db = firebase.database()
     storage = firebase.storage()
-    
+
     return db, storage, auth
 
 
-
 def main(db, storage, auth):
-    user = None   
+    user = None
     login_or_signup = st.sidebar.selectbox(
         options=['Login', 'Signup'], label='Account')
-    
-
 
     if login_or_signup == 'Signup':
         email = st.sidebar.text_input(
@@ -99,50 +107,45 @@ def main(db, storage, auth):
         submit = st.sidebar.button('Create my account')
         Login = st.sidebar.checkbox('Login/Logout', disabled=True)
 
-        signup_func(auth, db, submit, email, password, regex,handle)
+        signup_func(auth, db, submit, email, password, regex, handle)
 
     elif login_or_signup == 'Login':
         email = st.sidebar.text_input('Email', placeholder='JohnDoe@gmail.com')
         password = st.sidebar.text_input(
-        'Password', type='password', placeholder='Password')
+            'Password', type='password', placeholder='Password')
         Login = st.sidebar.checkbox('Login/Logout')
         regex = '([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+'
-        
+
         user = login_func(Login, email, password, regex, auth)
-        
-        
+
         if not Login:
             with st.sidebar.expander('Forgot password?'):
-                email = st.text_input('Enter your email', placeholder='JohnDoe@gmail.com')
+                email = st.text_input('Enter your email',
+                                      placeholder='JohnDoe@gmail.com')
                 reset_pass = st.button('Submit')
                 if reset_pass:
                     if email:
                         try:
                             auth.send_password_reset_email(email)
                             st.success('Reset link sent! Check your inbox')
-                            
+
                         except:
                             st.error('Email not found!')
                     else:
                         st.error('Enter a valid email')
-                    
-            
-        
-
-
 
     nav_bar = option_menu(None, ["Home", "How It Works", 'Neural Generator', "Account", "About"],
-                        icons=['house', 'info-circle',
-                                "music-note-beamed", "person-circle"],
-                        menu_icon="cast", default_index=0, orientation="horizontal",
-                        styles={
+                          icons=['house', 'info-circle',
+                                 "music-note-beamed", "person-circle"],
+                          menu_icon="cast", default_index=0, orientation="horizontal",
+                          styles={
         "container": {"padding": "2!important", "background-color": "#fffff"},
         "icon": {"color": "orange", "font-size": "20px"},
         "nav-link": {"font-size": "20px", "text-align": "left", "margin": "5px", "--hover-color": "grey"},
         "nav-link-selected": {"background-color": ""},
     }
     )
-    
+
     if nav_bar == 'Neural Generator':
         generate_melody(Login, user, storage, db)
 
@@ -157,18 +160,9 @@ def main(db, storage, auth):
 
     elif nav_bar == "About":
         show_about_page()
-   
-   
-   
-            
+
+
 if __name__ == "__main__":
     configure_streamlit()
     db, storage, auth = configure_database()
     main(db, storage, auth)
-            
-        
-
-            
-            
-            
-        

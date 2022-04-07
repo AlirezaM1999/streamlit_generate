@@ -60,7 +60,7 @@ def show_about_page():
 
         with col2:
             st_lottie(load_lottie_file(
-                'https://assets1.lottiefiles.com/packages/lf20_bp5lntrf.json'), width=550)
+                'https://assets1.lottiefiles.com/packages/lf20_bp5lntrf.json'), width=497)
 
     with st.container():
         st.write('---')
