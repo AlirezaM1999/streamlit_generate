@@ -18,10 +18,6 @@ def show_account_page(Login, storage, user, db):
                 try:
 
                     uid = user['localId']
-                    # fireb_upload = storage.child(uid).put(uploaded_file, user['idToken'])
-                    # stored_file = storage.child(uid).get_url(fireb_upload['downloadTokens'])
-                    # db.child(uid).child('Audio_Files').push(stored_file)
-                    # st.success('File successfully uploaded')
                     fireb_upload = storage.child(uid+'_'+uploaded_file.name).put(
                         uploaded_file, user['idToken'])
                     stored_file = storage.child(uid+'_'+uploaded_file.name).get_url(

@@ -67,24 +67,11 @@ def configure_database():
 
      }
 
-    # firebaseConfig = {
-
-    #     "apiKey": "AIzaSyAMRT8cCBjeN9X7C39dO0JYbkba3pg4p9A",
-    #     "authDomain": "st-fyp.firebaseapp.com",
-    #     "databaseURL": "https://st-fyp-default-rtdb.europe-west1.firebasedatabase.app",
-    #     "projectId": "st-fyp",
-    #     "storageBucket": "st-fyp.appspot.com",
-    #     "messagingSenderId": "955077353825",
-    #     "appId": "1:955077353825:web:58a7937c81f6ced8c66520",
-    #     "measurementId": "G-2DC2E6J4Z4"
-
-    # }
-
-    # Firebase Authentication
     firebase = pyrebase.initialize_app(firebaseConfig)
+    
+    
+    # Firebase Authentication, Database and Storage
     auth = firebase.auth()
-
-    # Database
     db = firebase.database()
     storage = firebase.storage()
 

@@ -18,8 +18,7 @@ def generate_melody(Login, user, storage, db):
     st.title('Neural Generator')
     st.text(
         'Select your preference and get your free AI generated melody')
-    st.markdown("""
-                Find more information here""")
+  
 
     form = st.form(key='submit-form')
     file_name = form.text_input('Select a unique name for your file', placeholder='Name',

@@ -14,10 +14,6 @@ def signup_func(auth, db, submit, email, password, regex,handle):
                     st.sidebar.success('Your account is created successfully!')
                     st.balloons()
 
-                    # Sign in
-                    user = auth.sign_in_with_email_and_password(
-                        email, password)
-
                     # creating a tree with the name localID with two child leafs that have values
                     db.child(user["localId"]).child("Handle").set(handle)
                     # givin the name of tree branch(localid) to the name
