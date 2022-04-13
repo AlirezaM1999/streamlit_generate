@@ -23,11 +23,9 @@ def show_about_page():
         st.markdown(
             """
             <p1 style="font-size:20px;">
-            A Computer Science Graduate from UK
             </p1>
-            </br>
             <p1 style="font-size:20px;">
-            I am passionate about find ways to use python to create apps and websites for a more efficient and less time consuming data science experience
+            I am passionate about finding ways to use python to create web apps and websites for a more efficient and less time consuming data science experience
             </p1> 
 
             """, unsafe_allow_html=True)
@@ -40,17 +38,17 @@ def show_about_page():
         with col1:
             st.header('What I do')
             st.write('###')
-            st.markdown('<p style="font-size:20px;">I am currently a third year Computer Science student with a burning passion with python and machine learning </p>', unsafe_allow_html=True)
+            st.markdown('<p style="font-size:20px;">I am currently a third year Computer Science student with a burning passion for python and machine learning </p>', unsafe_allow_html=True)
 
             st.markdown(
 
                 """
                 <p style="font-size:20px;">
-                On my freetime, I like to work create python web apps to:
+                On my free time, I like to create python web apps to:
                 <ul>
-                    <li>learn to leverage the power of Python in in web development</li>
-                    <li>learn Data Analysis & Data Science to perform meaningful and impactful analyses</li>
-                    <li>Leverage AI and machine learning to automate the boring stuff- "There is always an easier way"</li>
+                    <li>Learn to leverage the power of Python in web development</li>
+                    <li>Learn data analysis & data science to perform meaningful and yield meaningful results</li>
+                    <li>Leverage AI and machine learning to automate the boring stuff. There is always an easier way</li>
                 </ul> 
                 </p> 
                 """, unsafe_allow_html=True)
@@ -69,7 +67,7 @@ def show_about_page():
 
                 """
                 <p1 style="font-size:20px;">
-                If you have any inquiries or would like to get in touch with me, Fill the form below and I will get back to you as soon as possible
+                If you have any inquiries or would like to get in touch with me, Complete the form below and I will get back to you as soon as possible
                 </p1>
                 """, unsafe_allow_html=True)
         st.write('#')

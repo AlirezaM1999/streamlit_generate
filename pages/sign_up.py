@@ -12,6 +12,7 @@ def signup_func(auth, db, submit, email, password, regex,handle):
                     user = auth.create_user_with_email_and_password(email, password)
                     confirm_email = auth.send_email_verification(user['idToken'])
                     st.sidebar.success('Your account is created successfully!')
+                    st.sidebar.success('Check your email')
                     st.balloons()
 
                     # creating a tree with the name localID with two child leafs that have values

@@ -29,8 +29,8 @@ def generate_melody(Login, user, storage, db):
                             help='The number of musical steps you want the model the predict, the higher the number of steps, the longer the melody is going to be. You can think of this as the number of notes you want the model to predict from the start')
     key_sig = form.selectbox('Key Signature', options=[
                             'A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#'])
-    predictability = form.number_input('Temperature - the lower the number, the less preditable the generated output will be', min_value=0.1, max_value=1.0, step=0.1, value=0.8,
-                                    help='Temperature determines the rate at which the model picks the highest probabilstic output, i.e if the temperature is 0.8, theres a %80 chance that the model is going pick the the output with the highest probablity')
+    predictability = form.number_input('Temperature - The lower the number, the less predictable the generated output will be', min_value=0.1, max_value=1.0, step=0.1, value=0.8,
+                                    help='Temperature determines the rate at which the model picks the highest probabilistic output, i.e if the temperature is 0.8, theres an %80 chance that the model is going pick the output with the highest probability')
     generate_button = form.form_submit_button('Generate')
 
     if generate_button:

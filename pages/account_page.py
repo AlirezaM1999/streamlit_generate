@@ -7,7 +7,7 @@ def show_account_page(Login, storage, user, db):
     
     if Login:
         if not user:  #if user ticks the checkbox before log in in account page 
-            st.warning('Please login to see account information')
+            st.warning('Please log in to see account information')
         else:
             st.write('---')
             st.subheader('Upload A File')
@@ -59,5 +59,5 @@ def show_account_page(Login, storage, user, db):
                 st.info('No Files')
 
     else:
-        st.warning('Please login to see account information')
+        st.warning('Please log in to see account information')
 

@@ -52,9 +52,9 @@ def home():
             st.markdown(
                 """
                 <p1 style="font-size:23px;">
-                This tool uses artificial neural networks to create AI generated music on the fly. The model has been trained using a variety of datasets in order to learn different genres and being able to create music based on the genre. Whether you 
-                are an indepdent game developer, a complete begginer in music or a professional composers, Nueral Generator assists you in your creative endeavours. Create compelling melodies for your projects faster then ever before by leveraging the power 
-                of AI-generated music </p1>  
+                This tool uses artificial neural networks to create AI generated music on the fly. The model has been trained on a variety of genres and is able to create music based on the genre. Whether you 
+                are an independent game developer, a complete beginner in music or a professional composer, Nueral Generator assists you in your creative endeavour. Create compelling melodies for your projects faster then ever before by leveraging the power 
+                of AI. </p1>  
                 """, unsafe_allow_html=True)
         with col2:
             lottie_file = load_lottie_file(
@@ -70,13 +70,14 @@ def home():
             st.markdown(
                 """
                 <p1 style="font-size:22px;">
-                You will need to Sign up to the website to be able to use the neural generator. You can save your generated files in your profile so that you can use them later should you wish</p1> 
+                You do not need to sign up if you want to use the neural generator but you do if you want to save your files. You can save your generated files in your profile and use them later should you wish.</p1> 
             
                 <ol><b>
-                    <li> Navgiate to the sign up page</li>
+                    <li> Navgiate to the sign up sidebar</li>
                     <li> Create an account with a valid email and password</li>
-                    <li>Head to the login page and and login using your credenmtials</li>
-                    <li>All done! You can now generate melodies</li>
+                    <li> Verify your email</li>
+                    <li>Head to the login page and login using your credentials</li>
+                    <li>All done! You can now save your files</li>
                 </ol>
                 """, unsafe_allow_html=True)
 
@@ -90,7 +91,7 @@ def home():
     with st.container():
         st.write('---')
         st.header('Samples')
-        st.write('Below are some of the samples created using the neural generator')
+        st.write('Following samples were created using the neural generator')
 
         st.text('Classical Music Samples')
         midi_to_wav('samples/classic_sample1.midi')
