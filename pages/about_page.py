@@ -47,7 +47,7 @@ def show_about_page():
                 On my free time, I like to create python web apps to:
                 <ul>
                     <li>Learn to leverage the power of Python in web development</li>
-                    <li>Learn data analysis & data science to perform meaningful and yield meaningful results</li>
+                    <li>Learn data analysis & data science to perform meaningful tasks and yield meaningful results</li>
                     <li>Leverage AI and machine learning to automate the boring stuff. There is always an easier way</li>
                 </ul> 
                 </p> 
