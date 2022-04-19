@@ -132,6 +132,7 @@ def main(db, storage, auth):
         "nav-link-selected": {"background-color": ""},
     }
     )
+    
 
     if nav_bar == 'Neural Generator':
         generate_melody(Login, user, storage, db)

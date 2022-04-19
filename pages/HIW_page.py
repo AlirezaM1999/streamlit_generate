@@ -27,7 +27,7 @@ def hiw_page():
                     """, unsafe_allow_html=True)
 
         with col2:
-            st.image('images/neural_nerworks.png')
+            st.image('images/neural_networks.png',width=520, caption= "https://levity.ai/blog/difference-machine-learning-deep-learning - (Wolfewicz, 2021)")
 
     st.text('')
     st.write('---')
@@ -51,10 +51,10 @@ def hiw_page():
         col1, col2 = st.columns((1,0.7))
         with col1:
             st.image('images/nn_structure.png', width=470,
-                    caption='A Basic Neural Network Structure')
+                    caption='A Basic Neural Network Structure - https://towardsdatascience.com/designing-your-neural-networks-a5e4617027ed - (Shukla, 2019)')
         with col2:
             st.image('images/cnn.jpeg', width=530,
-                    caption='Convolutional Neural Network')
+                    caption='Convolutional Neural Network -  https://towardsdatascience.com/a-comprehensive-guide-to-convolutional-neural-networks-the-eli5-way-3bd2b1164a53 - (Saha, 2018)')
 
         st.write('')
         st.write('---')
@@ -94,7 +94,7 @@ def hiw_page():
             for _ in range(18):
                 st.text('')
             st.image('images/rnn_pics.gif', width=750,
-                    caption='Workings of Recurrent Neural Networks')
+                    caption='Workings of Recurrent Neural Networks - https://www.simplilearn.com/tutorials/deep-learning-tutorial/rnn - (Biswal, 2022)')
 
     st.write('---')
 
