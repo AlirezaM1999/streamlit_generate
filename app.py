@@ -1,13 +1,13 @@
 import pyrebase
 import streamlit as st
 from streamlit_option_menu import option_menu
-from pages.home_page import *
-from pages.HIW_page import *
-from pages.neural_generator_page import generate_melody
-from pages.account_page import show_account_page
-from pages.about_page import *
-from pages.log_in import login_func
-from pages.sign_up import signup_func
+from not_pages.home_page import *
+from not_pages.HIW_page import *
+from not_pages.neural_generator_page import generate_melody
+from not_pages.account_page import show_account_page
+from not_pages.about_page import *
+from not_pages.log_in import login_func
+from not_pages.sign_up import signup_func
 import time
 
 
